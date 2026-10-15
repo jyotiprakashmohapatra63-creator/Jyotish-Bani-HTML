@@ -1,0 +1,963 @@
+﻿<!DOCTYPE html>
+<html lang="or">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ଜ୍ୟୋତିଷ ବାଣୀ</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <link rel="stylesheet" href="styles.css">
+<script>
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
+    return false;
+  }
+};
+</script>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="header-bar">
+    <div class="brand-section">
+      <img src="logo.png" alt="ଜ୍ୟୋତିଷ ବାଣୀ Logo" class="brand-logo-img" />
+      <div class="brand-text">
+        <h1 data-i18n="appTitle">ଜ୍ୟୋତିଷ ବାଣୀ</h1>
+        <p data-i18n="appSubtitle">ବୈଦିକ କୁଣ୍ଡଳୀ, ପଞ୍ଚାଙ୍ଗ ଏବଂ ଜ୍ୟୋତିଷ ଗଣନା ସଫ୍ଟୱେର୍</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <!-- Universal Font Size Controller (Scales Entire Application) -->
+      <div class="font-size-ctrl global-font-ctrl" title="ସମଗ୍ର ସଫ୍ଟୱେର୍‌ର ଅକ୍ଷର ଆକାର ପରିବର୍ତ୍ତନ (Change Font Size Everywhere)">
+        <span class="font-ctrl-title">ଅକ୍ଷର:</span>
+        <button type="button" class="font-ctrl-btn" id="btnGlobalFontDec" title="ସମଗ୍ର ଅକ୍ଷର ଛୋଟ କରନ୍ତୁ (Font Small)">A−</button>
+        <span class="font-scale-indicator" id="globalFontScaleIndicator">100%</span>
+        <button type="button" class="font-ctrl-btn" id="btnGlobalFontInc" title="ସମଗ୍ର ଅକ୍ଷର ବଡ଼ କରନ୍ତୁ (Font Big)">A+</button>
+        <button type="button" class="font-ctrl-reset" id="btnGlobalFontReset" title="ସାଧାରଣ ଆକାର (Reset Font)">↺</button>
+      </div>
+
+      <!-- Language Selector -->
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="or">ଓଡ଼ିଆ</button>
+        <button class="lang-btn" data-lang="hi">हिन्दी</button>
+        <button class="lang-btn" data-lang="en">English</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="paneKundali">
+      <span>✨</span> <span data-i18n="tabKundali">ଜନ୍ମ କୁଣ୍ଡଳୀ</span>
+    </button>
+    <button class="tab-btn" data-tab="paneDivisional">
+      <span>🔮</span> <span data-i18n="tabDivisional">ବର୍ଗ ଚକ୍ର (D-Charts)</span>
+    </button>
+    <button class="tab-btn" data-tab="paneDasha">
+      <span>⏳</span> <span data-i18n="tabDasha">ବିଂଶୋତ୍ତରୀ ଦଶା</span>
+    </button>
+    <button class="tab-btn" data-tab="paneMilan">
+      <span>💍</span> <span data-i18n="tabMilan">କୁଣ୍ଡଳୀ ମେଳକ (୩୬ ଗୁଣ)</span>
+    </button>
+    <button class="tab-btn" data-tab="panePanchang">
+      <span>☀️</span> <span data-i18n="tabPanchang">ଦୈନିକ ପଞ୍ଚାଙ୍ଗ</span>
+    </button>
+    <button class="tab-btn" data-tab="paneMuhurta">
+      <span>🪔</span> <span data-i18n="tabMuhurta">ଶୁଭ ମୁହୂର୍ତ୍ତ (ବିବାହ/ବ୍ରତ/ପୂଜା)</span>
+    </button>
+    <button class="tab-btn" data-tab="paneFullPanjika">
+      <span>📅</span> <span data-i18n="tabFullPanjika">ପୂର୍ଣ୍ଣାଙ୍ଗ ପାଞ୍ଜି କ୍ୟାଲେଣ୍ଡର</span>
+    </button>
+    <button class="tab-btn" data-tab="panePrint">
+      <span>🖨️</span> <span data-i18n="tabPrint">କୁଣ୍ଡଳୀ ରିପୋର୍ଟ ପ୍ରିଣ୍ଟ</span>
+    </button>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- ==========================================
+         TAB 1: BIRTH CHART (ଜନ୍ମ କୁଣ୍ଡଳୀ)
+         ========================================== -->
+    <div id="paneKundali" class="tab-pane">
+      <div class="grid-layout" id="kundaliGridLayout">
+        
+        <!-- Left: Input Form Card -->
+        <div class="glass-card form-card" id="kundaliFormCard">
+          <div class="form-card-top-bar">
+            <h2 class="card-title" style="margin-bottom: 0; padding-bottom: 0; border: none;">
+              <span>📝</span> <span data-i18n="formTitle">ଜନ୍ମ ବିବରଣୀ ଦିଅନ୍ତୁ</span>
+            </h2>
+            <button type="button" class="btn-form-toggle" id="btnFormCollapse" title="ଫର୍ମ ଛୋଟ କରନ୍ତୁ (Minimize Form)">
+              <span id="formCollapseLabel">◀ ଛୋଟ କରନ୍ତୁ</span>
+            </button>
+          </div>
+
+          <!-- Minimized Quick Reference Pill (shown when collapsed) -->
+          <div class="form-collapsed-chip" id="formCollapsedChip" style="display: none;" title="କ୍ଲିକ୍ କରି ଫର୍ମ ଖୋଲନ୍ତୁ (Click to Expand Form)">
+            <div class="chip-main-info">
+              <span class="chip-icon">📝</span>
+              <div class="chip-details">
+                <strong id="chipName">ରାଜେଶ ମହାପାତ୍ର</strong>
+                <span id="chipMeta">03-06-1999 • 10:30 • ଅନୁଗୁଳ</span>
+              </div>
+            </div>
+            <button type="button" class="btn-chip-expand" id="btnChipExpand">✏️ ବିବରଣୀ ବଦଳାନ୍ତୁ (Edit)</button>
+          </div>
+
+          <form id="kundaliForm">
+            <div class="form-group">
+              <label data-i18n="nameLabel">ବ୍ୟକ୍ତିଙ୍କ ନାମ:</label>
+              <input type="text" id="nameInput" class="form-control" value="ରାଜେଶ ମହାପାତ୍ର">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label data-i18n="dobLabel">ଜନ୍ମ ତାରିଖ:</label>
+                <input type="date" id="dobInput" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label data-i18n="tobLabel">ଜନ୍ମ ସମୟ:</label>
+                <input type="time" id="tobInput" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-group city-search-wrapper" id="citySearchWrapper">
+              <label data-i18n="cityLabel">ଜନ୍ମ ସ୍ଥାନ (ସହର):</label>
+              <div class="city-combobox" id="cityCombobox">
+                <div class="city-input-wrap">
+                  <span class="city-search-icon">🔍</span>
+                  <input 
+                    type="text" 
+                    id="citySearchInput" 
+                    class="form-control city-search-input" 
+                    placeholder="ସହର ଖୋଜନ୍ତୁ... Search city (e.g. Balasore, Cuttack)" 
+                    autocomplete="off" 
+                    spellcheck="false"
+                  >
+                  <button type="button" class="city-clear-btn" id="cityClearBtn" title="Clear search" style="display: none;">✕</button>
+                  <button type="button" class="city-toggle-btn" id="cityToggleBtn" title="Select city list">▼</button>
+                </div>
+
+                <!-- Dropdown results container -->
+                <div class="city-dropdown-menu" id="cityDropdownMenu" style="display: none;">
+                  <!-- Favorite Cities Quick Chips (Dynamic User Favorites) -->
+                  <div class="city-quick-pills" id="cityQuickPills">
+                    <span class="quick-pill-label">⭐ ପ୍ରିୟ ସହର:</span>
+                    <div class="city-fav-chips-wrap" id="cityFavChipsWrap"></div>
+                  </div>
+
+                  <div class="city-dropdown-header">
+                    <span id="cityResultsCount">୮୫ ଗୋଟି ସ୍ଥାନ ଉପଲବ୍ଧ</span>
+                  </div>
+
+                  <div class="city-options-list" id="cityOptionsList"></div>
+
+                  <div class="city-custom-opt" id="cityCustomOpt">
+                    <span>⚙️ ସ୍ୱତନ୍ତ୍ର ଅକ୍ଷାଂଶ/ଦ୍ରାଘିମା (Custom Coordinates)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hidden native select retained for 100% backward compatibility -->
+              <select id="citySelect" class="form-select" style="display: none;"></select>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="panjikaLabel">ପାଞ୍ଜି ଗଣନା ପଦ୍ଧତି (Panjika Tradition):</label>
+              <select id="panjikaSelect" class="form-select">
+                <option value="drik" selected>🚩 କୋହିନୂର / ଆଧୁନିକ ଦୃକ୍-ସିଦ୍ଧ (ଲାହିଡ଼ି ଆୟନାଂଶ - ପ୍ରାମାଣିକ ଓ ସଠିକ)</option>
+                <option value="biraja">🚩 ବିରଜା ପାଞ୍ଜି (ଯାଜପୁର ସୂର୍ଯ୍ୟ ସିଦ୍ଧାନ୍ତ ଓ ପଳପ୍ରଭା ଲଗ୍ନମାନ)</option>
+                <option value="jagannath">🚩 ଶ୍ରୀ ଜଗନ୍ନାଥ ପାଞ୍ଜି (ସିଦ୍ଧାନ୍ତ ଦର୍ପଣ / ପଠାଣି ସାମନ୍ତ)</option>
+              </select>
+            </div>
+
+            <!-- Custom Coordinates (hidden by default) -->
+            <div id="customCoordsRow" class="form-row" style="display: none;">
+              <div class="form-group">
+                <label data-i18n="latLabel">Latitude:</label>
+                <input type="number" step="0.0001" id="latInput" class="form-control" value="20.2961">
+              </div>
+              <div class="form-group">
+                <label data-i18n="lonLabel">Longitude:</label>
+                <input type="number" step="0.0001" id="lonInput" class="form-control" value="85.8245">
+              </div>
+            </div>
+            <input type="hidden" id="tzInput" value="5.5">
+
+            <button type="submit" class="btn-primary" id="calculateKundaliBtn">
+              <span>🔮</span> <span data-i18n="calculateBtn">କୁଣ୍ଡଳୀ ଗଣନା କରନ୍ତୁ</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right: Kundali Chart & Planetary Tables -->
+        <div class="chart-and-details">
+          
+          <!-- Key Metrics Grid -->
+          <div class="metrics-grid">
+            <div class="metric-pill">
+              <span class="label" data-i18n="lagnaLabel">ଜନ୍ମ ଲଗ୍ନ:</span>
+              <span class="value" id="metricLagna">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="rashiLabel">ଚନ୍ଦ୍ର ରାଶି:</span>
+              <span class="value" id="metricRashi">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="nakshatraLabel">ଜନ୍ମ ନକ୍ଷତ୍ର:</span>
+              <span class="value" id="metricNak">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="padaLabel">ଚରଣ / ପାଦ:</span>
+              <span class="value" id="metricPada">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="sunSignLabel">ସୂର୍ଯ୍ୟ ରାଶି:</span>
+              <span class="value" id="metricSun">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="ayanamsaLabel">ଲାହିଡ଼ି ଆୟନାଂଶ:</span>
+              <span class="value" id="metricAyanamsa">-</span>
+            </div>
+          </div>
+
+          <!-- Biraja Calculation Info Banner (shown when Biraja Panjika is active) -->
+          <div id="birajaCalcInfoBanner" style="display: none; margin-bottom: 1.25rem; padding: 0.85rem 1.15rem; background: rgba(212, 175, 55, 0.08); border: 1px solid rgba(212, 175, 55, 0.35); border-radius: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.4rem;">🚩</span>
+                <div>
+                  <strong style="color: #f3c64c; font-size: 0.95rem;">ବିରଜା ପାଞ୍ଜି ସୂର୍ଯ୍ୟ ସିଦ୍ଧାନ୍ତ ଓ ପଳପ୍ରଭା ଲଗ୍ନମାନ ପଦ୍ଧତି</strong>
+                  <div id="birajaCalcLocation" style="font-size: 0.82rem; color: #cbd5e1; margin-top: 2px;">-</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; font-size: 0.85rem;">
+                <div class="metric-pill" style="padding: 0.3rem 0.75rem;">
+                  <span class="label" style="font-size: 0.75rem;">ଇଷ୍ଟକାଳ:</span>
+                  <span class="value" id="birajaIshtaKala" style="font-size: 0.88rem; color: #38bdf8; font-weight: 600;">-</span>
+                </div>
+                <div class="metric-pill" style="padding: 0.3rem 0.75rem;">
+                  <span class="label" style="font-size: 0.75rem;">ସମୟାନ୍ତର:</span>
+                  <span class="value" id="birajaTimeDiff" style="font-size: 0.88rem; color: #a78bfa; font-weight: 600;">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Side-by-Side: Lagna Chart D1 & Planetary Positions Table -->
+          <div class="side-by-side-wrapper" id="kundaliSideBySide">
+            
+            <!-- Left: Chart Visualizer Card -->
+            <div class="glass-card kundali-chart-card" id="kundaliCard">
+              <div class="chart-header" style="flex-wrap: wrap; gap: 0.75rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                  <h3 class="card-title" id="kundaliCardTitle" style="margin-bottom: 0; padding-bottom: 0; border: none;">
+                    <span>🕉️</span> <span data-i18n="tabKundali">ଜନ୍ମ କୁଣ୍ଡଳୀ (Lagna Chart D1)</span>
+                  </h3>
+                  <!-- Style Switcher (East, North, South) - Swapped to Left as requested -->
+                  <div class="style-selector">
+                    <button class="style-btn kundali-style-btn active" data-style="east" data-i18n="styleEast">ଓଡ଼ିଆ / ପୂର୍ବ ଭାରତୀୟ</button>
+                    <button class="style-btn kundali-style-btn" data-style="north" data-i18n="styleNorth">ଉତ୍ତର ଭାରତୀୟ</button>
+                    <button class="style-btn kundali-style-btn" data-style="south" data-i18n="styleSouth">ଦକ୍ଷିଣ ଭାରତୀୟ</button>
+                  </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                  <!-- View Switcher (D1, D9, Both) - Swapped to Right as requested -->
+                  <div class="view-selector">
+                    <button class="view-btn active" data-view="d1">ରାଶି (D1)</button>
+                    <button class="view-btn" data-view="d9">ନବାଂଶ (D9)</button>
+                    <button class="view-btn" data-view="both">ଉଭୟ ଏକତ୍ର (D1+D9)</button>
+                  </div>
+
+                  <!-- Graha Font Size Controller (Only scales planet names inside chart!) -->
+                  <div class="font-size-ctrl graha-font-ctrl" title="କୁଣ୍ଡଳୀ ଗ୍ରହ ଅକ୍ଷର ଆକାର (Kundali Graha Font Size)">
+                    <span class="font-ctrl-title">ଗ୍ରହ ଅକ୍ଷର:</span>
+                    <button type="button" class="font-ctrl-btn" id="btnGrahaFontDec" title="କୁଣ୍ଡଳୀ ଗ୍ରହ ଅକ୍ଷର ଛୋଟ କରନ୍ତୁ">A−</button>
+                    <span class="font-scale-indicator" id="grahaFontScaleIndicator">100%</span>
+                    <button type="button" class="font-ctrl-btn" id="btnGrahaFontInc" title="କୁଣ୍ଡଳୀ ଗ୍ରହ ଅକ୍ଷର ବଡ଼ କରନ୍ତୁ">A+</button>
+                    <button type="button" class="font-ctrl-reset" id="btnGrahaFontReset" title="ସାଧାରଣ ଆକାର">↺</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-display-box" id="kundaliChartBox">
+                <!-- SVG chart will render here -->
+              </div>
+            </div>
+
+            <!-- Right: Planetary Positions Table Card -->
+            <div class="glass-card planets-table-card" id="planetsCard">
+              <div class="chart-header" style="flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <h3 class="card-title" style="margin-bottom: 0; padding-bottom: 0; border: none;">
+                  <span>🪐</span> <span data-i18n="planetsTableTitle">ଗ୍ରହ ସ୍ଥିତି ଓ ଡିଗ୍ରୀ (Planetary Positions)</span>
+                </h3>
+              </div>
+
+              <div class="table-responsive">
+                <table class="astro-table">
+                  <thead>
+                    <tr>
+                      <th data-i18n="planet">ଗ୍ରହ</th>
+                      <th data-i18n="rashi">ରାଶି</th>
+                      <th data-i18n="degree">ଡିଗ୍ରୀ (Degree)</th>
+                      <th data-i18n="nakshatra">ନକ୍ଷତ୍ର</th>
+                      <th data-i18n="nakLord">ନକ୍ଷତ୍ରାଧିପତି</th>
+                      <th data-i18n="pada">ପାଦ</th>
+                      <th data-i18n="motion">ଦିଗ / ଗତି</th>
+                      <th data-i18n="status">ଅବସ୍ଥା</th>
+                      <th data-i18n="house">ଭାବ (House)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="planetsTableBody">
+                    <!-- Populated by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Comprehensive Vedic Shastriya Analysis Card (ଦୋଷ ବିଚାର, ମାତୃ-ପିତୃ ସମ୍ପର୍କ, D1+D9 ନବାଂଶ ଓ ଭବିଷ୍ୟତ ଫଳାଦେଶ) -->
+          <div class="glass-card" style="margin-top: 1.5rem;" id="shastriyaAnalysisCard">
+            <div class="chart-header" style="flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-gold-subtle); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+              <div>
+                <h3 class="card-title" style="border: none; margin-bottom: 0.25rem;">
+                  <span>📜</span> <span id="shastraCardTitle" data-i18n="shastraCardTitle">ଶାସ୍ତ୍ରୋକ୍ତ କୁଣ୍ଡଳୀ ଫଳାଦେଶ, ଦୋଷ ବିଚାର ଓ ଭବିଷ୍ୟତ ବିଶ୍ଳେଷଣ</span>
+                </h3>
+                <p style="font-size: 0.83rem; color: var(--text-muted); margin: 0;" data-i18n="shastraCardSubtitle">
+                  ବୃହତ ପରାଶର ହୋରା ଶାସ୍ତ୍ର ଓ ଜୈମିନି ମତ ଅନୁସାରେ ଲଗ୍ନ (D1) ଏବଂ ନବାଂଶ (D9) ସମନ୍ୱିତ ପୂର୍ଣ୍ଣାଙ୍ଗ ବିଶ୍ଳେଷଣ
+                </p>
+              </div>
+
+              <!-- Shastriya Analysis Sub-tabs Switcher -->
+              <div class="style-selector" id="shastraSubTabs">
+                <button type="button" class="style-btn shastra-tab-btn active" data-subtab="shastraDoshas">
+                  <span>⚠️</span> <span data-i18n="shastraTabDoshas">ଦୋଷ ବିଚାର</span>
+                </button>
+                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraMatruPitru">
+                  <span>👨‍👩‍👧</span> <span data-i18n="shastraTabMatruPitru">ମାତୃ-ପିତୃ ସମ୍ପର୍କ</span>
+                </button>
+                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraD1D9">
+                  <span>🔮</span> <span data-i18n="shastraTabD1D9">D1 + D9 ନବାଂଶ</span>
+                </button>
+                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraFuture">
+                  <span>🌟</span> <span data-i18n="shastraTabFuture">ଭବିଷ୍ୟତ (Acha-Bura)</span>
+                </button>
+                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraYogas">
+                  <span>👑</span> <span data-i18n="shastraTabYogas">ରାଜଯୋଗ</span>
+                </button>
+                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraRemedies">
+                  <span>🪔</span> <span data-i18n="shastraTabRemedies">ଶାସ୍ତ୍ରୋକ୍ତ ଉପାୟ</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Subtab Content Panes -->
+            <div id="shastraContentArea">
+              <!-- Subtab 1: Doshas -->
+              <div id="subtabPaneDoshas" class="shastra-pane">
+                <div class="dosha-cards-grid" id="doshasListContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1rem;">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Subtab 2: Matru-Pitru Relations -->
+              <div id="subtabPaneMatruPitru" class="shastra-pane" style="display: none;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;" id="matruPitruContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Subtab 3: D1 + D9 Synthesis -->
+              <div id="subtabPaneD1D9" class="shastra-pane" style="display: none;">
+                <div id="d1d9SynthesisContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Subtab 4: Future Predictions (Acha Bura Future) -->
+              <div id="subtabPaneFuture" class="shastra-pane" style="display: none;">
+                <div style="display: flex; flex-direction: column; gap: 1rem;" id="futurePredictionsContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Subtab 5: Auspicious Yogas -->
+              <div id="subtabPaneYogas" class="shastra-pane" style="display: none;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="yogasContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Subtab 6: Remedies & Upayas -->
+              <div id="subtabPaneRemedies" class="shastra-pane" style="display: none;">
+                <div id="remediesContainer">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 2: DIVISIONAL CHARTS (ନବାଂଶ ଓ ବର୍ଗ ଚକ୍ର)
+         ========================================== -->
+    <div id="paneDivisional" class="tab-pane" style="display: none;">
+      <div class="glass-card">
+        <div class="chart-header" style="flex-wrap: wrap; gap: 0.75rem;">
+          <div>
+            <h2 class="card-title" style="border: none; margin-bottom: 0.25rem;">
+              <span>🔮</span> <span id="divisionalTitleText">ନବାଂଶ ଚକ୍ର ଓ ବର୍ଗ କୁଣ୍ଡଳୀ (Navamsha D9 Chart)</span>
+            </h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+              ମହର୍ଷି ପରାଶର ଓ ଜୈମିନି ପ୍ରଣୀତ ପ୍ରାମାଣିକ ଶାସ୍ତ୍ରୀୟ ନବାଂଶ (D9) ଏବଂ ଷୋଡ଼ଶବର୍ଗ ବିଚାର
+            </p>
+          </div>
+          <div class="style-selector">
+            <button class="style-btn div-btn active" data-div="9">ନବାଂଶ (D9)</button>
+            <button class="style-btn div-btn" data-div="10">ଦଶମାଂଶ (D10)</button>
+            <button class="style-btn div-btn" data-div="7">ସପ୍ତମାଂଶ (D7)</button>
+            <button class="style-btn div-btn" data-div="3">ଦ୍ରେକ୍କାଣ (D3)</button>
+            <button class="style-btn div-btn" data-div="12">ଦ୍ୱାଦଶାଂଶ (D12)</button>
+          </div>
+        </div>
+
+        <!-- Navamsha Special Metrics Banner (visible when D9 is selected) -->
+        <div id="navamshaMetricsBanner" class="navamsha-banner" style="margin-top: 1.25rem;">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Divisional Chart Display Box -->
+        <div class="chart-display-box" id="divisionalChartBox" style="margin-top: 1rem;">
+          <!-- Divisional Chart SVG will render here -->
+        </div>
+
+        <!-- Navamsha Planetary Positions Table (visible when D9 is selected) -->
+        <div id="navamshaTableContainer" style="margin-top: 2rem;">
+          <h3 class="card-title">
+            <span>📐</span> <span>ନବାଂଶ ଗ୍ରହ ସ୍ଫୁଟ, ପାଦ ଓ କାରକ ବିବରଣୀ (D9 Planetary Table)</span>
+          </h3>
+          <div class="table-responsive">
+            <table class="astro-table">
+              <thead>
+                <tr>
+                  <th>ଗ୍ରହ</th>
+                  <th>ଡି୧ ରାଶି</th>
+                  <th>ଡିଗ୍ରୀ</th>
+                  <th>ନକ୍ଷତ୍ର ଓ ପାଦ</th>
+                  <th>ନବାଂଶ ରାଶି (D9)</th>
+                  <th>ନବାଂଶାଧିପତି</th>
+                  <th>ନବାଂଶ ଭାବ</th>
+                  <th>ନବାଂଶ ଗଣ</th>
+                  <th>ବର୍ଗୋତ୍ତମ</th>
+                  <th>ପୁଷ୍କର ନବାଂଶ</th>
+                  <th>ନବାଂଶ ଅବସ୍ଥା</th>
+                  <th>ଜୈମିନି କାରକ</th>
+                </tr>
+              </thead>
+              <tbody id="navamshaTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Deep Shastric Navamsha Interpretation Section (visible when D9 is selected) -->
+        <div id="navamshaAnalysisSection" style="margin-top: 2.5rem;">
+          <h3 class="card-title">
+            <span>📜</span> <span>ପ୍ରାମାଣିକ ନବାଂଶ ଶାସ୍ତ୍ରୀୟ ବିଶ୍ଳେଷଣ (Shastric Navamsha Principles)</span>
+          </h3>
+          <div class="navamsha-analysis-grid" id="navamshaAnalysisCards">
+            <!-- Populated by JS with 5 rich shastric insight cards -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 3: VIMSHOTTARI DASHA (ବିଂଶୋତ୍ତରୀ ଦଶା)
+         ========================================== -->
+    <div id="paneDasha" class="tab-pane" style="display: none;">
+      <div class="glass-card">
+        <h2 class="card-title">
+          <span>⏳</span> <span data-i18n="dashaTitle">ବିଂଶୋତ୍ତରୀ ମହାଦଶା ଫଳାଫଳ (୧୨୦ ବର୍ଷ)</span>
+        </h2>
+        <div style="background: rgba(212, 175, 55, 0.1); padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem; border-left: 4px solid var(--gold-accent);">
+          <span data-i18n="balanceDasha">ଜନ୍ମ ସମୟର ଦଶା ଶେଷାଂଶ:</span> 
+          <strong id="dashaBalanceText" style="color: #f3c64c; margin-left: 8px;">-</strong>
+        </div>
+
+        <div id="dashaList">
+          <!-- Timeline generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 4: KUNDALI MILAN (୩୬ ଗୁଣ ମେଳକ)
+         ========================================== -->
+    <div id="paneMilan" class="tab-pane" style="display: none;">
+      <div class="glass-card">
+        <h2 class="card-title">
+          <span>💍</span> <span data-i18n="milanTitle">ବିବାହ କୁଣ୍ଡଳୀ ମେଳକ (୩୬ ଗୁଣ ଯୋଟକ ବିଚାର)</span>
+        </h2>
+
+        <form id="milanForm">
+          <div class="milan-grid">
+            <!-- Groom Inputs -->
+            <div style="background: rgba(14, 20, 36, 0.6); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h3 style="color: #38bdf8; margin-bottom: 1rem;" data-i18n="groomDetails">ବର ବିବରଣୀ (Groom)</h3>
+              <div class="form-group">
+                <label data-i18n="rashi">ଚନ୍ଦ୍ର ରାଶି:</label>
+                <select id="groomRashiSelect" class="form-select">
+                  <option value="1">୧. ମେଷ (Mesha)</option>
+                  <option value="2">୨. ବୃଷ (Vrishabha)</option>
+                  <option value="3">୩. ମିଥୁନ (Mithuna)</option>
+                  <option value="4" selected>୪. କର୍କଟ (Karkata)</option>
+                  <option value="5">୫. ସିଂହ (Simha)</option>
+                  <option value="6">୬. କନ୍ୟା (Kanya)</option>
+                  <option value="7">୭. ତୁଳା (Tula)</option>
+                  <option value="8">୮. ବିଛା (Vrischika)</option>
+                  <option value="9">୯. ଧନୁ (Dhanu)</option>
+                  <option value="10">୧୦. ମକର (Makara)</option>
+                  <option value="11">୧୧. କୁମ୍ଭ (Kumbha)</option>
+                  <option value="12">୧୨. ମୀନ (Meena)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="nakshatra">ଜନ୍ମ ନକ୍ଷତ୍ର:</label>
+                <select id="groomNakSelect" class="form-select">
+                  <option value="1">୧. ଅଶ୍ୱିନୀ (Ashwini)</option>
+                  <option value="4">୪. ରୋହିଣୀ (Rohini)</option>
+                  <option value="8" selected>୮. ପୁଷ୍ୟା (Pushya)</option>
+                  <option value="13">୧୩. ହସ୍ତା (Hasta)</option>
+                  <option value="17">୧୭. ଅନୁରାଧା (Anuradha)</option>
+                  <option value="22">୨୨. ଶ୍ରବଣା (Shravana)</option>
+                  <option value="27">୨୭. ରେବତୀ (Revati)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Bride Inputs -->
+            <div style="background: rgba(14, 20, 36, 0.6); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid rgba(255, 255, 255, 0.05);">
+              <h3 style="color: #ec4899; margin-bottom: 1rem;" data-i18n="brideDetails">କନ୍ୟା ବିବରଣୀ (Bride)</h3>
+              <div class="form-group">
+                <label data-i18n="rashi">ଚନ୍ଦ୍ର ରାଶି:</label>
+                <select id="brideRashiSelect" class="form-select">
+                  <option value="1">୧. ମେଷ (Mesha)</option>
+                  <option value="2" selected>୨. ବୃଷ (Vrishabha)</option>
+                  <option value="3">୩. ମିଥୁନ (Mithuna)</option>
+                  <option value="4">୪. କର୍କଟ (Karkata)</option>
+                  <option value="5">୫. ସିଂହ (Simha)</option>
+                  <option value="6">୬. କନ୍ୟା (Kanya)</option>
+                  <option value="7">୭. ତୁଳା (Tula)</option>
+                  <option value="8">୮. ବିଛା (Vrischika)</option>
+                  <option value="9">୯. ଧନୁ (Dhanu)</option>
+                  <option value="10">୧୦. ମକର (Makara)</option>
+                  <option value="11">୧୧. କୁମ୍ଭ (Kumbha)</option>
+                  <option value="12">୧୨. ମୀନ (Meena)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="nakshatra">ଜନ୍ମ ନକ୍ଷତ୍ର:</label>
+                <select id="brideNakSelect" class="form-select">
+                  <option value="1">୧. ଅଶ୍ୱିନୀ (Ashwini)</option>
+                  <option value="4" selected>୪. ରୋହିଣୀ (Rohini)</option>
+                  <option value="8">୮. ପୁଷ୍ୟା (Pushya)</option>
+                  <option value="13">୧୩. ହସ୍ତା (Hasta)</option>
+                  <option value="17">୧୭. ଅନୁରାଧା (Anuradha)</option>
+                  <option value="22">୨୨. ଶ୍ରବଣା (Shravana)</option>
+                  <option value="27">୨୭. ରେବତୀ (Revati)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 1.5rem;">
+            <span>⚖️</span> <span data-i18n="milanBtn">ଗୁଣ ମିଳନ ଯାଞ୍ଚ କରନ୍ତୁ</span>
+          </button>
+        </form>
+
+        <!-- Milan Results Scorecard -->
+        <div class="milan-score-banner">
+          <div style="font-size: 1.1rem; color: #94a3b8;" data-i18n="totalScore">ମୋଟ ପ୍ରାପ୍ତ ଗୁଣ (Total Score):</div>
+          <div class="milan-big-number" id="milanTotalScore">30</div>
+          <div style="color: #fbbf24; font-weight: 600;" data-i18n="outOf36">୩୬ ଗୁଣ ମଧ୍ୟରୁ</div>
+          <div id="milanVerdictTag" class="verdict-tag good" style="margin-top: 1rem;">
+            ଉତ୍ତମ ଯୋଟକ! ବିବାହ ପାଇଁ ଅତ୍ୟନ୍ତ ଶୁଭ।
+          </div>
+        </div>
+
+        <!-- 8 Koot Breakdown Table -->
+        <table class="astro-table">
+          <thead>
+            <tr>
+              <th>ଅଷ୍ଟକୂଟ (Koot)</th>
+              <th>ନିର୍ଦ୍ଦିଷ୍ଟ ପଏଣ୍ଟ (Max)</th>
+              <th>ପ୍ରାପ୍ତ ଗୁଣ (Obtained)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>୧. ବର୍ଣ୍ଣ (Varna)</td><td>1</td><td id="scoreVarna">1 / 1</td></tr>
+            <tr><td>୨. ବଶ୍ୟ (Vashya)</td><td>2</td><td id="scoreVashya">2 / 2</td></tr>
+            <tr><td>୩. ତାରା (Tara)</td><td>3</td><td id="scoreTara">3 / 3</td></tr>
+            <tr><td>୪. ଯୋନି (Yoni)</td><td>4</td><td id="scoreYoni">4 / 4</td></tr>
+            <tr><td>୫. ଗ୍ରହ ମୈତ୍ରୀ (Maitri)</td><td>5</td><td id="scoreMaitri">5 / 5</td></tr>
+            <tr><td>୬. ଗଣ (Gana)</td><td>6</td><td id="scoreGana">6 / 6</td></tr>
+            <tr><td>୭. ଭକୂଟ (Bhakoot)</td><td>7</td><td id="scoreBhakoot">7 / 7</td></tr>
+            <tr><td>୮. ନାଡ଼ି (Nadi)</td><td>8</td><td id="scoreNadi">8 / 8</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 5: AUTHENTIC DAILY PANJIKA LEAF (ଦୈନିକ ପୂର୍ଣ୍ଣାଙ୍ଗ ପାଞ୍ଜି ପତ୍ର)
+         ========================================== -->
+    <div id="panePanchang" class="tab-pane" style="display: none;">
+      <div class="glass-card">
+        
+        <!-- Header -->
+        <div class="chart-header" style="margin-bottom: 1rem;">
+          <div>
+            <h2 class="card-title" style="border: none; margin-bottom: 0.25rem;">
+              <span>📜</span> <span data-i18n="panchangTitle">ଓଡ଼ିଶାର ପ୍ରାମାଣିକ ଦୈନିକ ପୂର୍ଣ୍ଣାଙ୍ଗ ପାଞ୍ଜି ପତ୍ର (Daily Authentic Panji Leaf)</span>
+            </h2>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin: 0;">
+              କୋହିନୂର, ବିରଜା ଓ ଜଗନ୍ନାଥ ପାଞ୍ଜି ଅନୁଯାୟୀ ସମ୍ପୂର୍ଣ୍ଣ ସଠିକ ଗଣନା (ଯୋଗିନୀ, ତାରାଶୁଦ୍ଧି, ଚନ୍ଦ୍ରଶୁଦ୍ଧି, ଘାତଚନ୍ଦ୍ର, ନିଷିଦ୍ଧ ଖାଦ୍ୟ, ଶୁଭକର୍ମ ଓ ୧୨ ରାଶିଫଳ ସହିତ)
+            </p>
+          </div>
+        </div>
+
+        <!-- Toolbar: Date picker, Quick Nav, City/Kshetra, Tradition, Theme, Layout, Print -->
+        <div class="panji-toolbar">
+          <!-- Group 1: Date & Nav -->
+          <div class="panji-toolbar-group">
+            <label style="font-size: 0.85rem; color: #fbbf24; font-weight: 600;">ତାରିଖ:</label>
+            <input type="date" id="panjiDateInput" class="form-control" style="width: auto; padding: 0.35rem 0.65rem; font-size: 0.9rem;">
+            <button id="panjiPrevDayBtn" class="panji-nav-btn" title="ପୂର୍ବ ଦିନ (Previous Day)">
+              <span>◀</span> <span>ଗତକାଲି</span>
+            </button>
+            <button id="panjiTodayBtn" class="panji-nav-btn active" title="ଆଜିର ପାଞ୍ଜି (Today)">
+              <span>📍</span> <span>ଆଜି</span>
+            </button>
+            <button id="panjiNextDayBtn" class="panji-nav-btn" title="ପରବର୍ତ୍ତୀ ଦିନ (Next Day)">
+              <span>ଆସନ୍ତାକାଲି</span> <span>▶</span>
+            </button>
+          </div>
+
+          <!-- Group 2: Kshetra & Tradition -->
+          <div class="panji-toolbar-group">
+            <select id="panjiKshetraSelect" class="form-select" style="width: auto; padding: 0.35rem 0.65rem; font-size: 0.88rem;">
+              <optgroup label="🚩 ମୁଖ୍ୟ କେନ୍ଦ୍ର (Main Center - Biraja Kshetra)">
+                <option value="jajpur" selected>ଯାଜପୁର (ବିରଜା କ୍ଷେତ୍ର) [ମୁଖ୍ୟ କେନ୍ଦ୍ର]</option>
+              </optgroup>
+              <optgroup label="🔱 ପ୍ରମୁଖ ଧର୍ମକ୍ଷେତ୍ର ଓ ସହର (Major Kshetras)">
+                <option value="puri">ପୁରୀ (ଶ୍ରୀକ୍ଷେତ୍ର) [ବିରଜା: +00:02:12]</option>
+                <option value="bhubaneswar">ଭୁବନେଶ୍ୱର (Bhubaneswar) [ବିରଜା: +00:02:04]</option>
+                <option value="cuttack">କଟକ (Cuttack) [ବିରଜା: +00:01:42]</option>
+                <option value="balasore">ବାଲେଶ୍ୱର (Balasore) [ବିରଜା: -00:02:16]</option>
+                <option value="sambalpur">ସମ୍ବଲପୁର (Sambalpur) [ବିରଜା: +00:09:24]</option>
+                <option value="berhampur">ବ୍ରହ୍ମପୁର (Berhampur) [ବିରଜା: +00:06:12]</option>
+                <option value="bhadrak">ଭଦ୍ରକ (Bhadrak) [ବିରଜା: -00:00:44]</option>
+              </optgroup>
+            </select>
+
+            <select id="panjiTraditionSelect" class="form-select" style="width: auto; padding: 0.35rem 0.65rem; font-size: 0.88rem;">
+              <option value="biraja" selected>🚩 ବିରଜା ପାଞ୍ଜି (ସୂର୍ଯ୍ୟ ସିଦ୍ଧାନ୍ତ)</option>
+              <option value="drik">🚩 କୋହିନୂର ପାଞ୍ଜି (ଦୃକ୍-ସିଦ୍ଧ)</option>
+              <option value="jagannath">🚩 ଶ୍ରୀ ଜଗନ୍ନାଥ ପାଞ୍ଜି (ସିଦ୍ଧାନ୍ତ ଦର୍ପଣ)</option>
+            </select>
+          </div>
+
+          <!-- Group 3: Theme, Layout, Print -->
+          <div class="panji-toolbar-group">
+            <button id="panjiThemeToggleBtn" class="panji-nav-btn" title="କାଗଜ / ଡାର୍କ ମୋଡ୍ ବଦଳାନ୍ତୁ">
+              <span>📜</span> <span id="themeToggleLabel">ପୁସ୍ତକ କାଗଜ ଶୈଳୀ</span>
+            </button>
+            <button id="panjiLayoutToggleBtn" class="panji-nav-btn" title="ଫଟୋ ପରି ୨ଟି ଦିନ ଦେଖନ୍ତୁ">
+              <span>📖</span> <span id="layoutToggleLabel">ଦୁଇ ଦିନିଆ (Photo Style)</span>
+            </button>
+            <button id="panjiPrintLeafBtn" class="panji-nav-btn" style="border-color: #38bdf8; background: rgba(56, 189, 248, 0.15);" title="ପାଞ୍ଜି ପତ୍ର ପ୍ରିଣ୍ଟ କରନ୍ତୁ">
+              <span>🖨️</span> <span style="color: #38bdf8; font-weight: 600;">ପତ୍ର ପ୍ରିଣ୍ଟ / PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Authentic Panji Leaf Render Container -->
+        <div id="authenticPanjiLeafContainer" class="panji-leaves-container">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Quick 5 Limbs Metrics Grid (Digital View) -->
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-gold-subtle); padding-top: 1.25rem;">
+          <h3 style="font-size: 1.05rem; color: #f3c64c; margin-bottom: 0.75rem;">
+            <span>⚡</span> <span>ଆଜିର ୫ଟି ପ୍ରମୁଖ ଅଙ୍ଗ ସଂକ୍ଷିପ୍ତ ସୂଚନା (Quick Panchang Glance)</span>
+          </h3>
+          <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+            <div class="metric-pill">
+              <span class="label" data-i18n="tithiLabel">ତିଥି:</span>
+              <span class="value" id="pTithi">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="vara">ବାର (Day):</span>
+              <span class="value" id="pVara">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="nakshatraLabel">ନକ୍ଷତ୍ର:</span>
+              <span class="value" id="pNakshatra">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="rahuKalam">ରାହୁ କାଳ:</span>
+              <span class="value" id="pRahu" style="color: #f87171;">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="abhijit">ଅଭିଜିତ୍ ମୁହୂର୍ତ୍ତ:</span>
+              <span class="value" id="pAbhijit" style="color: #34d399;">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panjika Comparison Section -->
+        <div>
+          <h3 class="card-title" style="font-size: 1.15rem; margin-bottom: 0.5rem;">
+            <span>⚖️</span> <span data-i18n="panjikaCompareTitle">ଓଡ଼ିଶାର ପ୍ରମୁଖ ପାଞ୍ଜି ତୁଳନାତ୍ମକ ବିବରଣୀ (Jagannath vs Biraja vs Drik)</span>
+          </h3>
+          <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1rem;">
+            ଓଡ଼ିଶାରେ ପାରମ୍ପରିକ ପଠାଣି ସାମନ୍ତ ସିଦ୍ଧାନ୍ତ ଦର୍ପଣ (ଜଗନ୍ନାଥ ପାଞ୍ଜି), ସୂର୍ଯ୍ୟ ସିଦ୍ଧାନ୍ତ (ବିରଜା ପାଞ୍ଜି) ଏବଂ ଆଧୁନିକ ଦୃକ୍-ସିଦ୍ଧ (କୋହିନୂର) ମଧ୍ୟରେ ଗଣନା ଭେଦ ରହିଥାଏ। ତଳେ ତିନୋଟି ପାଞ୍ଜିର ତୁଳନାତ୍ମକ ହିସାବ ଦିଆଗଲା:
+          </p>
+
+          <div class="table-responsive">
+            <table class="astro-table">
+              <thead>
+                <tr>
+                  <th>ପାଞ୍ଜି ପରମ୍ପରା (Panjika Tradition)</th>
+                  <th>ତିଥି (Tithi)</th>
+                  <th>ତିଥି ସମାପ୍ତି ସମୟ (Approx End Time)</th>
+                  <th>ନକ୍ଷତ୍ର (Nakshatra)</th>
+                  <th>ଆୟନାଂଶ (Ayanamsa)</th>
+                </tr>
+              </thead>
+              <tbody id="panjikaCompareTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB: SHUBH MUHURTA (ଶୁଭ ମୁହୂର୍ତ୍ତ - ବିବାହ/ବ୍ରତ/ପୂଜା)
+         ========================================== -->
+    <div id="paneMuhurta" class="tab-pane" style="display: none;">
+      <div class="glass-card">
+        <h2 class="card-title">
+          <span>🪔</span> <span>ଶୁଭ ମୁହୂର୍ତ୍ତ ନିର୍ଣ୍ଣୟ (ବିବାହ, ବ୍ରତୋପନୟନ, ପାଣିଗ୍ରହଣ ଓ ଅମୃତ ବେଳା)</span>
+        </h2>
+
+        <!-- Controls: Type, Month, Panjika -->
+        <div class="form-row" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="form-group">
+            <label>ମୁହୂର୍ତ୍ତ ପ୍ରକାର (Occasion):</label>
+            <select id="muhurtaTypeSelect" class="form-select">
+              <option value="bibaha" selected>💍 ଶୁଭ ବିବାହ ଲଗ୍ନ ଓ ପାଣିଗ୍ରହଣ (Marriage)</option>
+              <option value="brata">📿 ବ୍ରତୋପନୟନ / ବ୍ରତଘର (Upanayana)</option>
+              <option value="griha">🏠 ଶୁଭ ଗୃହପ୍ରବେଶ (House Warming)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ମାସ (Month):</label>
+            <select id="muhurtaMonthSelect" class="form-select">
+              <option value="1">ଜାନୁଆରୀ / ମାଘ</option>
+              <option value="2">ଫେବୃଆରୀ / ଫାଲ୍ଗୁନ</option>
+              <option value="3">ମାର୍ଚ୍ଚ / ଚୈତ୍ର</option>
+              <option value="4">ଏପ୍ରିଲ / ବୈଶାଖ</option>
+              <option value="5" selected>ମେ / ଜ୍ୟେଷ୍ଠ</option>
+              <option value="6">ଜୁନ୍ / ଆଷାଢ଼</option>
+              <option value="10">ଅକ୍ଟୋବର / କାର୍ତ୍ତିକ</option>
+              <option value="11">ନଭେମ୍ବର / ମାର୍ଗଶୀର</option>
+              <option value="12">ଡିସେମ୍ବର / ପୌଷ</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ପାଞ୍ଜି ଗଣନା (Panjika):</label>
+            <select id="muhurtaPanjikaSelect" class="form-select">
+              <option value="jagannath" selected>🚩 ଶ୍ରୀ ଜଗନ୍ନାଥ ପାଞ୍ଜି (ସିଦ୍ଧାନ୍ତ ଦର୍ପଣ)</option>
+              <option value="biraja">🚩 ବିରଜା ପାଞ୍ଜି (ସୂର୍ଯ୍ୟ ସିଦ୍ଧାନ୍ତ)</option>
+              <option value="drik">🚩 କୋହିନୂର / ଦୃକ୍-ସିଦ୍ଧ</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ବର୍ଷ (Year):</label>
+            <select id="muhurtaYearSelect" class="form-select">
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Muhurta Cards Container -->
+        <div id="muhurtaResultsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem;">
+          <!-- Generated by JS -->
+        </div>
+
+        <!-- Daily Choghadiya / Belas for Today -->
+        <div style="margin-top: 2rem; background: rgba(14, 20, 36, 0.7); border: 1px solid var(--border-gold-subtle); border-radius: var(--radius-md); padding: 1.25rem;">
+          <h3 style="color: var(--gold-accent); margin-bottom: 0.75rem; font-size: 1.1rem;">
+            <span>☀️</span> ଆଜିର ଶୁଭ ଅମୃତ ବେଳା, ମହେନ୍ଦ୍ର ବେଳା ଓ ବାରବେଳା (Daily Belas)
+          </h3>
+          <div class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 0;">
+            <div class="metric-pill">
+              <span class="label">ଅମୃତ ବେଳା (Amrita Bela):</span>
+              <span class="value" id="belaAmrita" style="color: #34d399; font-size: 0.85rem;">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label">ମହେନ୍ଦ୍ର ବେଳା (Mahendra):</span>
+              <span class="value" id="belaMahendra" style="color: #38bdf8; font-size: 0.85rem;">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label">ବାରବେଳା (Varabela):</span>
+              <span class="value" id="belaVara" style="color: #f87171; font-size: 0.85rem;">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label">କାଳବେଳା (Kalabela):</span>
+              <span class="value" id="belaKala" style="color: #f87171; font-size: 0.85rem;">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB: FULL PANJIKA CALENDAR (ପୂର୍ଣ୍ଣାଙ୍ଗ ପାଞ୍ଜି)
+         ========================================== -->
+    <div id="paneFullPanjika" class="tab-pane" style="display: none;">
+      <div class="glass-card">
+        <div class="chart-header">
+          <h2 class="card-title" style="border: none; margin-bottom: 0;">
+            <span>📅</span> <span>ଓଡ଼ିଶାର ପୂର୍ଣ୍ଣାଙ୍ଗ ମାସିକ ପାଞ୍ଜି (Full Monthly Panjika Calendar)</span>
+          </h2>
+        </div>
+
+        <!-- Month & Year & Panjika Switcher -->
+        <div class="form-row" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0 1.5rem 0;">
+          <div class="form-group">
+            <label>ମାସ ଚୟନ (Month):</label>
+            <select id="fullPanjikaMonthSelect" class="form-select">
+              <option value="1">୧. ଜାନୁଆରୀ (ମକର / ଧନୁ)</option>
+              <option value="2">୨. ଫେବୃଆରୀ (କୁମ୍ଭ / ମକର)</option>
+              <option value="3">୩. ମାର୍ଚ୍ଚ (ମୀନ / କୁମ୍ଭ)</option>
+              <option value="4">୪. ଏପ୍ରିଲ (ମେଷ / ବୈଶାଖ - ପଣା ସଂକ୍ରାନ୍ତି)</option>
+              <option value="5">୫. ମେ (ବୃଷ / ଜ୍ୟେଷ୍ଠ)</option>
+              <option value="6">୬. ଜୁନ୍ (ମିଥୁନ / ଆଷାଢ଼ - ରଜ ପର୍ବ)</option>
+              <option value="7">୭. ଜୁଲାଇ (କର୍କଟ / ଶ୍ରାବଣ - ରଥଯାତ୍ରା)</option>
+              <option value="8">୮. ଅଗଷ୍ଟ (ସିଂହ / ଭାଦ୍ରବ - ଜନ୍ମାଷ୍ଟମୀ)</option>
+              <option value="9">୯. ସେପ୍ଟେମ୍ବର (କନ୍ୟା / ଆଶ୍ୱିନ - ନୂଆଖାଇ)</option>
+              <option value="10" selected>୧୦. ଅକ୍ଟୋବର (ତୁଳା / କନ୍ୟା - ଦୁର୍ଗାପୂଜା / ଦଶହରା)</option>
+              <option value="11">୧୧. ନଭେମ୍ବର (ବିଛା / କାର୍ତ୍ତିକ - ବୋଇତ ବନ୍ଦାଣ)</option>
+              <option value="12">୧୨. ଡିସେମ୍ବର (ଧନୁ / ମାର୍ଗଶୀର - ପ୍ରଥମାଷ୍ଟମୀ)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ବର୍ଷ (Year):</label>
+            <select id="fullPanjikaYearSelect" class="form-select">
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>ପାଞ୍ଜି ପରମ୍ପରା (Panjika Tradition):</label>
+            <select id="fullPanjikaSystemSelect" class="form-select">
+              <option value="biraja" selected>🚩 ବିରଜା ପାଞ୍ଜି (ସୂର୍ଯ୍ୟ ସିଦ୍ଧାନ୍ତ)</option>
+              <option value="drik">🚩 କୋହିନୂର / ଆଧୁନିକ ଦୃକ୍-ସିଦ୍ଧ</option>
+              <option value="jagannath">🚩 ଶ୍ରୀ ଜଗନ୍ନାଥ ପାଞ୍ଜି (ସିଦ୍ଧାନ୍ତ ଦର୍ପଣ)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Full Panjika Table -->
+        <div class="table-responsive">
+          <table class="astro-table">
+            <thead>
+              <tr>
+                <th>ତାରିଖ (Date)</th>
+                <th>ବାର (Day)</th>
+                <th>ସୌର ଦିନ</th>
+                <th>ତିଥି ଓ ସମାପ୍ତ ସମୟ</th>
+                <th>ନକ୍ଷତ୍ର</th>
+                <th>ଅମୃତ ବେଳା</th>
+                <th>ରାହୁ କାଳ</th>
+                <th>ପର୍ବପର୍ବାଣି / ଶୁଭ କାର୍ଯ୍ୟ</th>
+                <th>ପାଞ୍ଜି ପତ୍ର</th>
+              </tr>
+            </thead>
+            <tbody id="fullPanjikaTableBody">
+              <!-- Generated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         TAB 6: PRINT / PDF EXPORT (ପ୍ରିଣ୍ଟ କୁଣ୍ଡଳୀ)
+         ========================================== -->
+    <div id="panePrint" class="tab-pane" style="display: none;">
+      <div class="glass-card" style="text-align: center; padding: 3rem 1.5rem;">
+        <h2 style="font-family: 'Cinzel', serif; color: var(--gold-accent); margin-bottom: 0.5rem;" data-i18n="reportHeader">
+          ଶ୍ରୀ ଜଗନ୍ନାଥାୟ ନମଃ - ବୈଦିକ ଜନ୍ମ କୁଣ୍ଡଳୀ ରିପୋର୍ଟ
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">
+          ଆପଣ ଏହି ବଟନ୍ କ୍ଲିକ୍ କରି ସମ୍ପୂର୍ଣ୍ଣ କୁଣ୍ଡଳୀ ରିପୋର୍ଟକୁ PDF ଭାବରେ Save କରିପାରିବେ କିମ୍ବା Printer ମାଧ୍ୟମରେ Print କରିପାରିବେ।
+        </p>
+
+        <button id="printBtnAction" class="btn-primary" style="max-width: 320px; margin: 0 auto; font-size: 1.15rem;">
+          <span>🖨️</span> <span data-i18n="printBtn">କୁଣ୍ଡଳୀ PDF / Print କରନ୍ତୁ</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Offline Internet Connection Required Modal Popup (with User Logo) -->
+  <div id="offlineModalOverlay" class="offline-modal-overlay" style="display: none;">
+    <div class="offline-modal-card">
+      <div class="offline-logo-wrap">
+        <img src="logo.png" alt="ଜ୍ୟୋତିଷ ବାଣୀ Logo" class="offline-logo-img" />
+        <span class="offline-pulse-beacon" title="ଇଣ୍ଟରନେଟ୍ ବିଚ୍ଛିନ୍ନ"></span>
+      </div>
+      <h2 class="offline-modal-title">📡 ଇଣ୍ଟରନେଟ୍ ସଂଯୋଗ ଆବଶ୍ୟକ</h2>
+      <p class="offline-modal-subtitle">
+        <strong>ଜ୍ୟୋତିଷ ବାଣୀ</strong> ସଫ୍ଟୱେର୍ ଚଳାଇବା ପାଇଁ ଦୟାକରି ଆପଣଙ୍କର ଇଣ୍ଟରନେଟ୍ (Wi-Fi କିମ୍ବା Mobile Data) ସଂଯୋଗ କରନ୍ତୁ।
+      </p>
+      <div class="offline-status-pill" id="offlineStatusPill">
+        <span class="status-dot"></span>
+        <span id="offlineStatusText">ଇଣ୍ଟରନେଟ୍ ବିଚ୍ଛିନ୍ନ (Offline)</span>
+      </div>
+      <p class="offline-hint">ଇଣ୍ଟରନେଟ୍ ସଂଯୋଗ ହେବା ମାତ୍ରେ ଏହି ପପ୍-ଅପ୍ ଆପେ ଆପେ ବନ୍ଦ ହୋଇଯିବ।</p>
+      <button type="button" class="btn-primary btn-retry-offline" id="btnRetryInternet">
+        <span>🔄</span> <span>ପୁନର୍ବାର ଯାଞ୍ଚ କରନ୍ତୁ (Retry Connection)</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="astronomy.browser.min.js"></script>
+  <script src="bundle.shield.js"></script>
+</body>
+</html>
