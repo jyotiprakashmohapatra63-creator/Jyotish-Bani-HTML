@@ -19,62 +19,64 @@ document.onkeydown = function(e) {
 </head>
 <body>
 
-  <!-- Top Header Navigation -->
-  <header class="header-bar">
-    <div class="brand-section">
-      <img src="logo.png" alt="ଜ୍ୟୋତିଷ ବାଣୀ Logo" class="brand-logo-img" />
-      <div class="brand-text">
-        <h1 data-i18n="appTitle">ଜ୍ୟୋତିଷ ବାଣୀ</h1>
-        <p data-i18n="appSubtitle">ବୈଦିକ କୁଣ୍ଡଳୀ, ପଞ୍ଚାଙ୍ଗ ଏବଂ ଜ୍ୟୋତିଷ ଗଣନା ସଫ୍ଟୱେର୍</p>
-      </div>
-    </div>
-
-    <div class="header-controls">
-      <!-- Universal Font Size Controller (Scales Entire Application) -->
-      <div class="font-size-ctrl global-font-ctrl" title="ସମଗ୍ର ସଫ୍ଟୱେର୍‌ର ଅକ୍ଷର ଆକାର ପରିବର୍ତ୍ତନ (Change Font Size Everywhere)">
-        <span class="font-ctrl-title">ଅକ୍ଷର:</span>
-        <button type="button" class="font-ctrl-btn" id="btnGlobalFontDec" title="ସମଗ୍ର ଅକ୍ଷର ଛୋଟ କରନ୍ତୁ (Font Small)">A−</button>
-        <span class="font-scale-indicator" id="globalFontScaleIndicator">100%</span>
-        <button type="button" class="font-ctrl-btn" id="btnGlobalFontInc" title="ସମଗ୍ର ଅକ୍ଷର ବଡ଼ କରନ୍ତୁ (Font Big)">A+</button>
-        <button type="button" class="font-ctrl-reset" id="btnGlobalFontReset" title="ସାଧାରଣ ଆକାର (Reset Font)">↺</button>
+  <!-- Top Sticky Header Container (Pins Header Bar + All Tabs Permanently on Scroll) -->
+  <div class="top-sticky-header" id="topStickyHeader">
+    <header class="header-bar">
+      <div class="brand-section">
+        <img src="logo.png" alt="ଜ୍ୟୋତିଷ ବାଣୀ Logo" class="brand-logo-img" />
+        <div class="brand-text">
+          <h1 data-i18n="appTitle">ଜ୍ୟୋତିଷ ବାଣୀ</h1>
+          <p data-i18n="appSubtitle">ବୈଦିକ କୁଣ୍ଡଳୀ, ପଞ୍ଚାଙ୍ଗ ଏବଂ ଜ୍ୟୋତିଷ ଗଣନା ସଫ୍ଟୱେର୍</p>
+        </div>
       </div>
 
-      <!-- Language Selector -->
-      <div class="lang-selector">
-        <button class="lang-btn active" data-lang="or">ଓଡ଼ିଆ</button>
-        <button class="lang-btn" data-lang="hi">हिन्दी</button>
-        <button class="lang-btn" data-lang="en">English</button>
-      </div>
-    </div>
-  </header>
+      <div class="header-controls">
+        <!-- Universal Font Size Controller (Scales Entire Application) -->
+        <div class="font-size-ctrl global-font-ctrl" title="ସମଗ୍ର ସଫ୍ଟୱେର୍‌ର ଅକ୍ଷର ଆକାର ପରିବର୍ତ୍ତନ (Change Font Size Everywhere)">
+          <span class="font-ctrl-title">ଅକ୍ଷର:</span>
+          <button type="button" class="font-ctrl-btn" id="btnGlobalFontDec" title="ସମଗ୍ର ଅକ୍ଷର ଛୋଟ କରନ୍ତୁ (Font Small)">A−</button>
+          <span class="font-scale-indicator" id="globalFontScaleIndicator">100%</span>
+          <button type="button" class="font-ctrl-btn" id="btnGlobalFontInc" title="ସମଗ୍ର ଅକ୍ଷର ବଡ଼ କରନ୍ତୁ (Font Big)">A+</button>
+          <button type="button" class="font-ctrl-reset" id="btnGlobalFontReset" title="ସାଧାରଣ ଆକାର (Reset Font)">↺</button>
+        </div>
 
-  <!-- Navigation Tabs -->
-  <nav class="tabs-nav">
-    <button class="tab-btn active" data-tab="paneKundali">
-      <span>✨</span> <span data-i18n="tabKundali">ଜନ୍ମ କୁଣ୍ଡଳୀ</span>
-    </button>
-    <button class="tab-btn" data-tab="paneDivisional">
-      <span>🔮</span> <span data-i18n="tabDivisional">ବର୍ଗ ଚକ୍ର (D-Charts)</span>
-    </button>
-    <button class="tab-btn" data-tab="paneDasha">
-      <span>⏳</span> <span data-i18n="tabDasha">ବିଂଶୋତ୍ତରୀ ଦଶା</span>
-    </button>
-    <button class="tab-btn" data-tab="paneMilan">
-      <span>💍</span> <span data-i18n="tabMilan">କୁଣ୍ଡଳୀ ମେଳକ (୩୬ ଗୁଣ)</span>
-    </button>
-    <button class="tab-btn" data-tab="panePanchang">
-      <span>☀️</span> <span data-i18n="tabPanchang">ଦୈନିକ ପଞ୍ଚାଙ୍ଗ</span>
-    </button>
-    <button class="tab-btn" data-tab="paneMuhurta">
-      <span>🪔</span> <span data-i18n="tabMuhurta">ଶୁଭ ମୁହୂର୍ତ୍ତ (ବିବାହ/ବ୍ରତ/ପୂଜା)</span>
-    </button>
-    <button class="tab-btn" data-tab="paneFullPanjika">
-      <span>📅</span> <span data-i18n="tabFullPanjika">ପୂର୍ଣ୍ଣାଙ୍ଗ ପାଞ୍ଜି କ୍ୟାଲେଣ୍ଡର</span>
-    </button>
-    <button class="tab-btn" data-tab="panePrint">
-      <span>🖨️</span> <span data-i18n="tabPrint">କୁଣ୍ଡଳୀ ରିପୋର୍ଟ ପ୍ରିଣ୍ଟ</span>
-    </button>
-  </nav>
+        <!-- Language Selector -->
+        <div class="lang-selector">
+          <button class="lang-btn active" data-lang="or">ଓଡ଼ିଆ</button>
+          <button class="lang-btn" data-lang="hi">हिन्दी</button>
+          <button class="lang-btn" data-lang="en">English</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" data-tab="paneKundali">
+        <span>✨</span> <span data-i18n="tabKundali">ଜନ୍ମ କୁଣ୍ଡଳୀ</span>
+      </button>
+      <button class="tab-btn" data-tab="paneDivisional">
+        <span>🔮</span> <span data-i18n="tabDivisional">ବର୍ଗ ଚକ୍ର (D-Charts)</span>
+      </button>
+      <button class="tab-btn" data-tab="paneDasha">
+        <span>⏳</span> <span data-i18n="tabDasha">ବିଂଶୋତ୍ତରୀ ଦଶା</span>
+      </button>
+      <button class="tab-btn" data-tab="paneMilan">
+        <span>💍</span> <span data-i18n="tabMilan">କୁଣ୍ଡଳୀ ମେଳକ (୩୬ ଗୁଣ)</span>
+      </button>
+      <button class="tab-btn" data-tab="panePanchang">
+        <span>☀️</span> <span data-i18n="tabPanchang">ଦୈନିକ ପଞ୍ଚାଙ୍ଗ</span>
+      </button>
+      <button class="tab-btn" data-tab="paneMuhurta">
+        <span>🪔</span> <span data-i18n="tabMuhurta">ଶୁଭ ମୁହୂର୍ତ୍ତ (ବିବାହ/ବ୍ରତ/ପୂଜା)</span>
+      </button>
+      <button class="tab-btn" data-tab="paneFullPanjika">
+        <span>📅</span> <span data-i18n="tabFullPanjika">ପୂର୍ଣ୍ଣାଙ୍ଗ ପାଞ୍ଜି କ୍ୟାଲେଣ୍ଡର</span>
+      </button>
+      <button class="tab-btn" data-tab="panePrint">
+        <span>🖨️</span> <span data-i18n="tabPrint">କୁଣ୍ଡଳୀ ରିପୋର୍ଟ ପ୍ରିଣ୍ଟ</span>
+      </button>
+    </nav>
+  </div>
 
   <!-- Main Container -->
   <main class="main-wrapper">
