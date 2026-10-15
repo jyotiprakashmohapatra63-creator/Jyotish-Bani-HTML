@@ -75,6 +75,11 @@ document.onkeydown = function(e) {
       <button class="tab-btn" data-tab="panePrint">
         <span>🖨️</span> <span data-i18n="tabPrint">କୁଣ୍ଡଳୀ ରିପୋର୍ଟ ପ୍ରିଣ୍ଟ</span>
       </button>
+
+      <!-- Toggle Birth Details Summary Bar (Hide / Show) -->
+      <button type="button" class="tab-info-toggle-btn" id="btnTabToggleInfo" title="ଜନ୍ମ ବିବରଣୀ ପଟି ଲୁଚାନ୍ତୁ / ଦେଖାନ୍ତୁ">
+        <span id="tabToggleInfoIcon">👁️</span> <span id="tabToggleInfoText" data-i18n="tabToggleInfoBtn">ବିବରଣୀ ପଟି</span>
+      </button>
     </nav>
   </div>
 
@@ -103,27 +108,44 @@ document.onkeydown = function(e) {
             <div class="chip-main-info">
               <span class="chip-icon">📝</span>
               <div class="chip-details">
-                <strong id="chipName">ରାଜେଶ ମହାପାତ୍ର</strong>
-                <span id="chipMeta">03-06-1999 • 10:30 • ଅନୁଗୁଳ</span>
+                <strong id="chipName">ବାବା ବାଣେଶ୍ୱର ଜ୍ୟୋତିଷ କାର୍ଯ୍ୟାଳୟ</strong>
+                <span id="chipMeta">📅 1999-06-03 (ଗୁରୁବାର) • ⏰ 10:30 AM • 📍 ଅନୁଗୁଳ (Angul)</span>
               </div>
             </div>
-            <button type="button" class="btn-chip-expand" id="btnChipExpand">✏️ ବିବରଣୀ ବଦଳାନ୍ତୁ (Edit)</button>
+            <div class="chip-actions">
+              <button type="button" class="btn-chip-expand" id="btnChipExpand" title="ବିବରଣୀ ବଦଳାନ୍ତୁ">
+                <span>✏️</span> <span data-i18n="chipEditBtn">ବିବରଣୀ ବଦଳାନ୍ତୁ</span>
+              </button>
+              <button type="button" class="btn-chip-hide" id="btnChipHide" title="ଏହି ପଟିକୁ ଲୁଚାନ୍ତୁ">
+                <span>👁️</span> <span data-i18n="chipHideBtn">ଲୁଚାନ୍ତୁ</span>
+              </button>
+            </div>
           </div>
 
           <form id="kundaliForm">
             <div class="form-group">
               <label data-i18n="nameLabel">ବ୍ୟକ୍ତିଙ୍କ ନାମ:</label>
-              <input type="text" id="nameInput" class="form-control" value="ରାଜେଶ ମହାପାତ୍ର">
+              <input type="text" id="nameInput" class="form-control" value="ବାବା ବାଣେଶ୍ୱର ଜ୍ୟୋତିଷ କାର୍ଯ୍ୟାଳୟ">
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
-                <label data-i18n="dobLabel">ଜନ୍ମ ତାରିଖ:</label>
-                <input type="date" id="dobInput" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label data-i18n="tobLabel">ଜନ୍ମ ସମୟ:</label>
-                <input type="time" id="tobInput" class="form-control" required>
+            <div class="form-group">
+              <label data-i18n="dobLabel">ଜନ୍ମ ତାରିଖ:</label>
+              <input type="date" id="dobInput" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="tobLabel">ଜନ୍ମ ସମୟ:</label>
+              <div class="time-12hr-picker" id="time12HrPicker">
+                <div class="time-inputs-cluster">
+                  <input type="text" id="tobHour" class="form-control time-input-box" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="10" placeholder="10" title="ଘଣ୍ଟା (Hour: 1-12)" autocomplete="off" required>
+                  <span class="time-colon">:</span>
+                  <input type="text" id="tobMinute" class="form-control time-input-box" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="30" placeholder="30" title="ମିନିଟ୍ (Minute: 00-59)" autocomplete="off" required>
+                </div>
+                <div class="ampm-toggle-group">
+                  <button type="button" class="ampm-btn active" data-ampm="AM">AM</button>
+                  <button type="button" class="ampm-btn" data-ampm="PM">PM</button>
+                </div>
+                <input type="hidden" id="tobInput" value="10:30">
               </div>
             </div>
 
@@ -196,6 +218,13 @@ document.onkeydown = function(e) {
           </form>
         </div>
 
+        <!-- Collapsed Bar Unhide Floating Pill (shown only when summary bar is hidden) -->
+        <div class="chip-unhide-pill-wrap" id="chipUnhidePillWrap" style="display: none;">
+          <button type="button" class="btn-chip-unhide" id="btnChipUnhide" title="ଜନ୍ମ ବିବରଣୀ ପଟି ଖୋଲନ୍ତୁ">
+            <span>👁️</span> <span id="unhidePillLabel" data-i18n="chipUnhideBtn">ଜନ୍ମ ବିବରଣୀ ପଟି ଖୋଲନ୍ତୁ ▼</span>
+          </button>
+        </div>
+
         <!-- Right: Kundali Chart & Planetary Tables -->
         <div class="chart-and-details">
           
@@ -220,6 +249,10 @@ document.onkeydown = function(e) {
             <div class="metric-pill">
               <span class="label" data-i18n="sunSignLabel">ସୂର୍ଯ୍ୟ ରାଶି:</span>
               <span class="value" id="metricSun">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="varaLabel">ଜନ୍ମ ବାର:</span>
+              <span class="value" id="metricVara">-</span>
             </div>
             <div class="metric-pill">
               <span class="label" data-i18n="ayanamsaLabel">ଲାହିଡ଼ି ଆୟନାଂଶ:</span>
@@ -326,7 +359,7 @@ document.onkeydown = function(e) {
 
           <!-- Comprehensive Vedic Shastriya Analysis Card (ଦୋଷ ବିଚାର, ମାତୃ-ପିତୃ ସମ୍ପର୍କ, D1+D9 ନବାଂଶ ଓ ଭବିଷ୍ୟତ ଫଳାଦେଶ) -->
           <div class="glass-card" style="margin-top: 1.5rem;" id="shastriyaAnalysisCard">
-            <div class="chart-header" style="flex-wrap: wrap; gap: 0.75rem; border-bottom: 1px solid var(--border-gold-subtle); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+            <div class="chart-header shastra-sticky-header" id="shastraStickyHeader">
               <div>
                 <h3 class="card-title" style="border: none; margin-bottom: 0.25rem;">
                   <span>📜</span> <span id="shastraCardTitle" data-i18n="shastraCardTitle">ଶାସ୍ତ୍ରୋକ୍ତ କୁଣ୍ଡଳୀ ଫଳାଦେଶ, ଦୋଷ ବିଚାର ଓ ଭବିଷ୍ୟତ ବିଶ୍ଳେଷଣ</span>
@@ -363,7 +396,7 @@ document.onkeydown = function(e) {
             <div id="shastraContentArea">
               <!-- Subtab 1: Doshas -->
               <div id="subtabPaneDoshas" class="shastra-pane">
-                <div class="dosha-cards-grid" id="doshasListContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1rem;">
+                <div class="dosha-cards-grid" id="doshasListContainer">
                   <!-- Populated dynamically -->
                 </div>
               </div>
@@ -391,7 +424,7 @@ document.onkeydown = function(e) {
 
               <!-- Subtab 5: Auspicious Yogas -->
               <div id="subtabPaneYogas" class="shastra-pane" style="display: none;">
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="yogasContainer">
+                <div class="shastra-yogas-grid" id="yogasContainer">
                   <!-- Populated dynamically -->
                 </div>
               </div>
