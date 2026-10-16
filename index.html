@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
   <link rel="apple-touch-icon" href="logo.png">
-  <link rel="stylesheet" href="styles.css?v=1792143544">
+  <link rel="stylesheet" href="styles.css?v=1792174260">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -115,6 +115,10 @@ document.onkeydown = function(e) {
                 <span id="chipMeta">📅 1999-06-03 (ଗୁରୁବାର) • ⏰ 10:30 AM • 📍 ଅନୁଗୁଳ (Angul)</span>
               </div>
             </div>
+
+            <!-- Middle Empty Space: Shastriya Analysis Sub-tabs Dock here on scroll down (No extra bar!) -->
+            <div class="chip-shastra-dock" id="chipShastraDock"></div>
+
             <div class="chip-actions">
               <button type="button" class="btn-chip-expand" id="btnChipExpand" title="ବିବରଣୀ ବଦଳାନ୍ତୁ">
                 <span>✏️</span> <span data-i18n="chipEditBtn">ବିବରଣୀ ବଦଳାନ୍ତୁ</span>
@@ -244,10 +248,16 @@ document.onkeydown = function(e) {
             <div class="metric-pill">
               <span class="label" data-i18n="nakshatraLabel">ଜନ୍ମ ନକ୍ଷତ୍ର:</span>
               <span class="value" id="metricNak">-</span>
+              <span class="subvalue" id="metricNakSub" style="font-size:0.75rem; color:#38bdf8; display:none; margin-top:2px;"></span>
             </div>
             <div class="metric-pill">
               <span class="label" data-i18n="padaLabel">ଚରଣ / ପାଦ:</span>
               <span class="value" id="metricPada">-</span>
+            </div>
+            <div class="metric-pill">
+              <span class="label" data-i18n="tithiLabel">ଜନ୍ମ ତିଥି:</span>
+              <span class="value" id="metricTithi">-</span>
+              <span class="subvalue" id="metricTithiSub" style="font-size:0.75rem; color:#fde047; display:none; margin-top:2px;"></span>
             </div>
             <div class="metric-pill">
               <span class="label" data-i18n="sunSignLabel">ସୂର୍ଯ୍ୟ ରାଶି:</span>
@@ -258,7 +268,7 @@ document.onkeydown = function(e) {
               <span class="value" id="metricVara">-</span>
             </div>
             <div class="metric-pill">
-              <span class="label" data-i18n="ayanamsaLabel">ଲାହିଡ଼ି ଆୟନାଂଶ:</span>
+              <span class="label" id="metricAyanamsaLabel" data-i18n="ayanamsaLabel">ଅୟନାଂଶ:</span>
               <span class="value" id="metricAyanamsa">-</span>
             </div>
           </div>
@@ -281,6 +291,10 @@ document.onkeydown = function(e) {
                 <div class="metric-pill" style="padding: 0.3rem 0.75rem;">
                   <span class="label" style="font-size: 0.75rem;">ସମୟାନ୍ତର:</span>
                   <span class="value" id="birajaTimeDiff" style="font-size: 0.88rem; color: #a78bfa; font-weight: 600;">-</span>
+                </div>
+                <div class="metric-pill" style="padding: 0.3rem 0.75rem;" id="birajaPanjiEndingPill">
+                  <span class="label" style="font-size: 0.75rem;">ପାଞ୍ଜି ଭୋଗ ସମୟ:</span>
+                  <span class="value" id="birajaPanjiEnding" style="font-size: 0.88rem; color: #4ade80; font-weight: 600;">-</span>
                 </div>
               </div>
             </div>
@@ -372,26 +386,28 @@ document.onkeydown = function(e) {
                 </p>
               </div>
 
-              <!-- Shastriya Analysis Sub-tabs Switcher -->
-              <div class="style-selector" id="shastraSubTabs">
-                <button type="button" class="style-btn shastra-tab-btn active" data-subtab="shastraDoshas">
-                  <span>⚠️</span> <span data-i18n="shastraTabDoshas">ଦୋଷ ବିଚାର</span>
-                </button>
-                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraMatruPitru">
-                  <span>👨‍👩‍👧</span> <span data-i18n="shastraTabMatruPitru">ମାତୃ-ପିତୃ ସମ୍ପର୍କ</span>
-                </button>
-                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraD1D9">
-                  <span>🔮</span> <span data-i18n="shastraTabD1D9">D1 + D9 ନବାଂଶ</span>
-                </button>
-                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraFuture">
-                  <span>🌟</span> <span data-i18n="shastraTabFuture">ଭବିଷ୍ୟତ (Acha-Bura)</span>
-                </button>
-                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraYogas">
-                  <span>👑</span> <span data-i18n="shastraTabYogas">ରାଜଯୋଗ</span>
-                </button>
-                <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraRemedies">
-                  <span>🪔</span> <span data-i18n="shastraTabRemedies">ଶାସ୍ତ୍ରୋକ୍ତ ଉପାୟ</span>
-                </button>
+              <!-- Shastriya Analysis Sub-tabs Origin -->
+              <div class="shastra-tabs-dock-origin" id="shastraTabsOrigin">
+                <div class="style-selector" id="shastraSubTabs">
+                  <button type="button" class="style-btn shastra-tab-btn active" data-subtab="shastraDoshas">
+                    <span class="subtab-icon">⚠️</span> <span data-i18n="shastraTabDoshas">ଦୋଷ ବିଚାର</span>
+                  </button>
+                  <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraMatruPitru">
+                    <span class="subtab-icon">👨‍👩‍👧</span> <span data-i18n="shastraTabMatruPitru">ମାତୃ-ପିତୃ</span>
+                  </button>
+                  <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraD1D9">
+                    <span class="subtab-icon">🔮</span> <span data-i18n="shastraTabD1D9">D1 + D9</span>
+                  </button>
+                  <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraFuture">
+                    <span class="subtab-icon">🌟</span> <span data-i18n="shastraTabFuture">ଭବିଷ୍ୟତ</span>
+                  </button>
+                  <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraYogas">
+                    <span class="subtab-icon">👑</span> <span data-i18n="shastraTabYogas">ରାଜଯୋଗ</span>
+                  </button>
+                  <button type="button" class="style-btn shastra-tab-btn" data-subtab="shastraRemedies">
+                    <span class="subtab-icon">🪔</span> <span data-i18n="shastraTabRemedies">ଉପାୟ</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -995,7 +1011,7 @@ document.onkeydown = function(e) {
     </div>
   </div>
 
-  <script src="astronomy.browser.min.js?v=1792143544"></script>
-  <script src="bundle.shield.js?v=1792143544"></script>
+  <script src="astronomy.browser.min.js?v=1792174260"></script>
+  <script src="bundle.shield.js?v=1792174260"></script>
 </body>
 </html>
